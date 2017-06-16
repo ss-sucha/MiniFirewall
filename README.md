@@ -1,17 +1,17 @@
 # MiniFirewall
 ## Introduction
-Mini Firewall is a simple Firewall system for Linux operating system. It employs an exact-match algorithm to filter TCP and UDP packets according to user-specified rules.
+MiniFirewall is a simple Firewall system for Linux operating system. It employs an exact-match algorithm to filter TCP and UDP packets according to user-specified rules.
 
-Mini Firewall is composed of a user-space program `mfw` and a kernel-space module `mfw_module`. Communications between user space and kernel space go through a (charactor) device file `mfw_file`. Using `mfw` command, a user can specify filtering rules, which consist of some of the following fields:
+MiniFirewall is composed of a user-space program `mfw` and a kernel-space module `mfw_module`. Communications between user space and kernel space go through a (charactor) device file `mfw_file`. Using `mfw` command, a user can specify filtering rules, which consist of some of the following fields:
 * Direction: inbound, outbound
 * Source: IP address, subnet mask, port number
 * Destination: IP address, subnet mask, port number
 * Protocol number: TCP(6), UDP(17)
 
-Each created rule is sent to and stored in `mfw_module` module. The module utilizes Netfilter to compare every packets with user-specified rules. When packet fields exactly matches one of the rules, the packat is dropped (filtered).
+Each created rule is sent to and stored in `mfw_module` module. The module utilizes 'netfilter' to compare every packets with user-specified rules. When packet's fields matches one of the rules, the packat is dropped (filtered).
 
 ## Installation
-The user-space program `mfw` and the kernel-space module `mfw_module` can be constructed by executing:
+The user-space program `mfw` and the kernel-space module `mfw_module` can be compiled by executing:
 ```
 $ make
 ```
@@ -22,7 +22,7 @@ $ mknod mfw_file c 100 0
 
 ## Usage
 ### Insert kernel module
-The kernel module `mfw_module` must be inserted into a kernel of a Linux operating system before running the user-space program `mfw`. This can be done using: (require root permission)
+The kernel module `mfw_module` must be inserted into the kernel of a Linux operating system before running the user-space program `mfw`. This can be done by the insert module command: (require root permission)
 ```
 $ insmod ./mfw_module.ko
 ```
@@ -48,3 +48,13 @@ Note that the add and remove commands require root permission. Additional usage 
 ```
 $ ./mfw --help
 ```
+
+## References
+I personally implemented this project to learn Linux kernel programming, device files, kernel interfaces, and netfilter. The project is inspired by several online material relating to Linux kernel programming, ioctl, netfilter, firewall projects as listed below.
+* [The Linux Kernel Module Programming Guide](http://tldp.org/LDP/lkmpg/2.6/html/)
+* [Sysfs, Procfs, Sysctl, Debugfs And Other Similar Kernel Interfaces](https://johnsofteng.wordpress.com/2013/11/20/sysfs-procfs-sysctl-debugfs-and-other-similar-kernel-interfaces/)
+* [The netfilter.org project](https://www.netfilter.org/)
+* [A Deep Dive into Iptables and Netfilter Architecture](https://www.digitalocean.com/community/tutorials/a-deep-dive-into-iptables-and-netfilter-architecture)
+* [How to Write a Linux Firewall in Less than 1000 Lines of Code](http://www.roman10.net/2011/07/23/a-linux-firewall-using-netfilter-part-1overview/)
+* [Linux Firewall Lab](http://www.cis.syr.edu/~wedu/seed/Labs/Firewall_Linux/)
+	

@@ -16,7 +16,7 @@ enum mfw_mode {
 };
 
 
-/* Filter rule of Mini-Firewall */
+/* Filter rule of MiniFirewall */
 struct mfw_rule {
 	uint32_t in;
 	uint32_t s_ip;

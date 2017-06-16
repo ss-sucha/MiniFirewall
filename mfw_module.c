@@ -100,7 +100,7 @@ mfw_general_filter(void *priv, struct sk_buff *skb,
 		if(!IGNORE(r->d_port) && (r->d_port != d_port))
 			continue;
 
-		printk(KERN_INFO "Mini Firewall: Drop packet "
+		printk(KERN_INFO "MiniFirewall: Drop packet "
 		       "src %d.%d.%d.%d : %d   dst %d.%d.%d.%d : %d   proto %d\n",
 		       IP_POS(s_ip, 3), IP_POS(s_ip, 2),
 		       IP_POS(s_ip, 1), IP_POS(s_ip, 0), s_port,
@@ -147,7 +147,7 @@ mfw_dev_open(struct inode *inode, struct file *file)
 	Device_open++;
 
 	if(!try_module_get(THIS_MODULE)) {
-		printk(KERN_ALERT "Mini Firewall: Module is not available\n");
+		printk(KERN_ALERT "MiniFirewall: Module is not available\n");
 		return -ESRCH;
 	}
 	return 0;
@@ -226,11 +226,11 @@ mfw_rule_add(struct mfw_rule *rule)
 
 	if(nodep->rule.in == 1) {
 		list_add_tail(&nodep->list, &In_lhead);
-		printk(KERN_INFO "Mini Firewall: Add rule to the inbound list ");
+		printk(KERN_INFO "MiniFirewall: Add rule to the inbound list ");
 	}
 	else {
 		list_add_tail(&nodep->list, &Out_lhead);
-		printk(KERN_INFO "Mini Firewall: Add rule to the outbound list ");
+		printk(KERN_INFO "MiniFirewall: Add rule to the outbound list ");
 	}
 	printk(KERN_INFO
 	       "src %d.%d.%d.%d : %d   dst %d.%d.%d.%d : %d   proto %d\n",
@@ -269,7 +269,7 @@ mfw_rule_del(struct mfw_rule *rule)
 		   node->rule.proto == rule->proto) {
 			list_del(lp->next);
 			kfree(node);
-			printk(KERN_INFO "Mini Firewall: Remove rule "
+			printk(KERN_INFO "MiniFirewall: Remove rule "
 			       "src %d.%d.%d.%d : %d   dst %d.%d.%d.%d : %d   "
 			       "proto %d\n",
 			       IP_POS(rule->s_ip, 3), IP_POS(rule->s_ip, 2),
@@ -286,7 +286,7 @@ mfw_rule_del(struct mfw_rule *rule)
 
 /*
  * The function handles user-space write operation, which sends add and remove
- * instruction to the Mini Firewall module
+ * instruction to the MiniFirewall module
  */
 static ssize_t
 mfw_dev_write(struct file *file, const char *buffer, size_t length,
@@ -297,7 +297,7 @@ mfw_dev_write(struct file *file, const char *buffer, size_t length,
 
 	if(length < sizeof(*ctlp)) {
 		printk(KERN_ALERT
-		       "Mini Firewall: Receives incomplete instruction\n");
+		       "MiniFirewall: Receives incomplete instruction\n");
 		return byte_write;
 	}
 
@@ -318,7 +318,7 @@ mfw_dev_write(struct file *file, const char *buffer, size_t length,
 		break;
 	default:
 		printk(KERN_ALERT
-		       "Mini Firewall: Received an unknown command\n");
+		       "MiniFirewall: Received an unknown command\n");
 	}
 
 	return byte_write;
@@ -353,7 +353,7 @@ struct file_operations mfw_dev_fops = {
 
 
 /*
- * The Mini Firewall kernel module is initialized by this function.
+ * The MiniFirewall kernel module is initialized by this function.
  */
 static int __init mfw_mod_init(void)
 {
@@ -364,7 +364,7 @@ static int __init mfw_mod_init(void)
 	Buffer = (char *)kmalloc(sizeof(struct mfw_ctl *), GFP_KERNEL);
 	if(Buffer == NULL) {
 		printk(KERN_ALERT
-		       "Mini Firewall: Fails to start due to out of memory\n");
+		       "MiniFirewall: Fails to start due to out of memory\n");
 		return -1;
 	}
 	INIT_LIST_HEAD(&In_lhead);
@@ -374,13 +374,13 @@ static int __init mfw_mod_init(void)
 	ret = register_chrdev(DEVICE_MAJOR_NUM, DEVICE_INTF_NAME, &mfw_dev_fops);
 	if(ret < 0) {
 		printk(KERN_ALERT
-		       "Mini Firewall: Fails to start due to device register\n");
+		       "MiniFirewall: Fails to start due to device register\n");
 		return ret;
 	}
-	printk(KERN_INFO "Mini Firewall: "
+	printk(KERN_INFO "MiniFirewall: "
 	       "Char device %s is registered with major number %d\n",
 	       DEVICE_INTF_NAME, DEVICE_MAJOR_NUM);
-	printk(KERN_INFO "Mini Firewall: "
+	printk(KERN_INFO "MiniFirewall: "
 	       "To communicate to the device, use: mknod %s c %d 0\n",
 	       DEVICE_INTF_NAME, DEVICE_MAJOR_NUM);
 
@@ -394,7 +394,7 @@ module_init(mfw_mod_init);
 
 
 /*
- * The Mini Firewall module is cleaned up by this function.
+ * The MiniFirewall module is cleaned up by this function.
  */
 static void __exit mfw_mod_cleanup(void)
 {
@@ -406,19 +406,19 @@ static void __exit mfw_mod_cleanup(void)
 	list_for_each_entry_safe(nodep, ntmp, &In_lhead, list) {
 		list_del(&nodep->list);
 		kfree(nodep);
-		printk(KERN_INFO "Mini Firewall: Deleted inbound rule %p\n",
+		printk(KERN_INFO "MiniFirewall: Deleted inbound rule %p\n",
 		       nodep);
 	}
 
 	list_for_each_entry_safe(nodep, ntmp, &Out_lhead, list) {
 		list_del(&nodep->list);
 		kfree(nodep);
-		printk(KERN_INFO "Mini Firewall: Deleted outbound rule %p\n",
+		printk(KERN_INFO "MiniFirewall: Deleted outbound rule %p\n",
 		       nodep);
 	}
 
 	unregister_chrdev(DEVICE_MAJOR_NUM, DEVICE_INTF_NAME);
-	printk(KERN_INFO "Mini Firewall: Device %s is unregistered\n",
+	printk(KERN_INFO "MiniFirewall: Device %s is unregistered\n",
 	       DEVICE_INTF_NAME);
 
 	nf_unregister_hook(&mfw_in_hook_ops);

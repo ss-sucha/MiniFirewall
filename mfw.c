@@ -18,7 +18,7 @@ static void
 print_usage(void)
 {
 	printf("Usage: mf RULE_OPTIONS..\n"
-	       "Mini Firewall implements an exact match algorithm, where "
+	       "MiniFirewall implements an exact match algorithm, where "
 	       "unspecified options are ignored.\n"
 	       "-i --in             input\n"
 	       "-o --out            output\n"
@@ -37,7 +37,7 @@ print_usage(void)
 
 
 /*
- * The function sends a command to a Mini-Firewall module via a device file.
+ * The function sends a command to a MiniFirewall module via a device file.
  */
 static void
 send_instruction(struct mfw_ctl *ctl)
