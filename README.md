@@ -15,14 +15,14 @@ The user-space program `mfw` and the kernel-space module `mfw_module` can be com
 ```
 $ make
 ```
-A (charactor) device file must be created as an interface between the user-space program and the kernel module. A default device number is `100`, so a device file `mfw_file` can be created as follows: (require root permission)
+A (charactor) device file must be created as an interface between the user-space program and the kernel module. A default device number is `100`, so a device file `mfw_file` can be created as follows:
 ```
 $ mknod mfw_file c 100 0
 ```
 
 ## Usage
 ### Insert kernel module
-The kernel module `mfw_module` must be inserted into the kernel of a Linux operating system before running the user-space program `mfw`. This can be done by the insert module command: (require root permission)
+The kernel module `mfw_module` must be inserted into the kernel of a Linux operating system before running the user-space program `mfw`. This can be done by the insert module command:
 ```
 $ insmod ./mfw_module.ko
 ```
@@ -44,7 +44,7 @@ To remove the above rule:
 $ ./mfw --remove --in --d_port 55555
 ```
 
-Note that the add and remove commands require root permission. Additional usage information can be shown by executing:
+Additional usage information can be shown by executing:
 ```
 $ ./mfw --help
 ```
