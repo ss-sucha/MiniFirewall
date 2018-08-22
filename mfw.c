@@ -303,4 +303,5 @@ main(int argc, char *argv[])
 	default:
 		return 0;
 	}
+	return 0;
 }
